@@ -104,6 +104,9 @@ namespace JiraExport
                             case "MapSprint":
                                 value = IfChanged<string>(item.Source, isCustomField, FieldMapperUtils.MapSprint);
                                 break;
+                            case "MapNexerSprint":
+                                value = IfChanged<string>(item.Source, isCustomField, FieldMapperUtils.MapNexerSprint);
+                                break;
                             case "MapTags":
                                 value = IfChanged<string>(item.Source, isCustomField, FieldMapperUtils.MapTags);
                                 break;

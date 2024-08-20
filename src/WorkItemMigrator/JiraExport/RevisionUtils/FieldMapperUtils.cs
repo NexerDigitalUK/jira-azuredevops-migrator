@@ -88,10 +88,10 @@ namespace JiraExport
                     var mappedValue = (from s in item.Mapping.Values where s.Source == value.ToString() select s.Target).FirstOrDefault();
                     if (string.IsNullOrEmpty(mappedValue))
                     {
-                        Logger.Log(LogLevel.Warning, $"Missing mapping value '{value}' for field '{itemSource}' for item type '{targetWit}'.");
+                        Logger.Log(LogLevel.Warning, $"Missing mapping value '{value}' for field '{itemSource}' for item type '{r.Type}'.");
                         if(itemSource == "status")
                         {
-                            exportIssuesSummary.AddUnmappedIssueState(targetWit, value.ToString());
+                            exportIssuesSummary.AddUnmappedIssueState(r.Type, value.ToString());
                         }
                     }
                     return (true, mappedValue);
@@ -181,6 +181,21 @@ namespace JiraExport
             iterationPath = ReplaceAzdoInvalidCharacters(iterationPath);
 
             return iterationPath;
+        }
+
+        public static object MapNexerSprint(string value)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+                return null;
+            var iterationPaths = value.Split(',').Select(ip => ip.Trim().Split('='));
+            var sprintName = iterationPaths.FirstOrDefault(x => x[0] == "name")?[1];
+            if (string.IsNullOrWhiteSpace(sprintName))
+            {
+                Logger.Log(LogLevel.Error, $"Failed to get Spring Name from {value}");
+                return null;
+            }
+
+            return ReplaceAzdoInvalidCharacters(sprintName);
         }
 
         private static readonly Dictionary<string, decimal> CalculatedLexoRanks = new Dictionary<string, decimal>();

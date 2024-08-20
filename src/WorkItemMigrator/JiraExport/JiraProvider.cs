@@ -2,6 +2,7 @@
 using Atlassian.Jira.Remote;
 using Migration.Common;
 using Migration.Common.Log;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RestSharp;
 using System;
@@ -331,6 +332,7 @@ namespace JiraExport
                 var response =
                     _jiraServiceWrapper.RestClient.ExecuteRequestAsync(Method.GET, $"{JiraApiV2}/issue/{key}?expand=renderedFields").Result;
 
+                var rawJson = JsonConvert.SerializeObject(response);
                 var remoteItem = (JObject)response;
                 return remoteItem;
             }

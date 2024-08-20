@@ -1,6 +1,7 @@
 ﻿using Atlassian.Jira;
 using Migration.Common;
 using Migration.Common.Log;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -20,7 +21,7 @@ namespace JiraExport
                 return default(JiraItem);
 
             Logger.Log(LogLevel.Debug, $"Downloaded item.");
-
+            var rawJson = JsonConvert.SerializeObject(remoteIssue);
             var jiraItem = new JiraItem(jiraProvider, remoteIssue);
             var revisions = BuildRevisions(jiraItem, jiraProvider);
             jiraItem.Revisions = revisions;
